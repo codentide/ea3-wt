@@ -17,12 +17,13 @@ pipeline {
                             string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                         ]) {
                             sh """
-                            docker build --build-arg MONGO_URI=${MONGO_URI} -t monolithic-app:v1 .
+                            docker build --build-arg MONGO_URI=${MONGO_URI} -t monolithic-app:v1 ./ea3-wt/monolithic-app
                             """  
                         }
                     }
                 }
         }
+
 
         stage('Desplegar Docker'){
             steps {
