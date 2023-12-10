@@ -1,0 +1,71 @@
+version: '3.7'
+services:
+  monolithic-app:
+    container_name: monolithic-app
+    image: monolithic-app:v1
+    build:
+      context: ./monolithic-app
+    ports:
+      - "4001:4001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    networks:
+      - proyectos-app
+
+  microservice-proyecto:
+    container_name: microservice-proyecto
+    image: microservice-proyecto:v1
+    build:
+      context: ./microservice-proyecto
+    ports:
+      - "4002"
+    environment:
+      - MONGO_URI=${MONGO_URI}      
+    networks:
+      - proyectos-app  
+
+  microservice-proyecto-2:
+    container_name: microservice-proyecto-2
+    image: microservice-proyecto:v1
+    build:
+      context: ./microservice-proyecto
+    ports:
+      - "4002"
+    environment:
+      - MONGO_URI=${MONGO_URI}      
+    networks:
+      - proyectos-app  
+
+  load-balancer:
+    container_name: load-balancer
+    image: load-balancer:v1
+    build: 
+      context: ./microservice-proyecto/load-balancer
+    ports:
+      - "4003:80"
+    networks:
+      - proyectos-app  
+    depends_on:
+      - microservice-proyecto
+      - microservice-proyecto-2
+
+  jenkins:
+    container_name: pipe-jenkins
+    image: pipe-jenkins:v1  
+    build:
+      context: ./pipe
+    ports:
+      - "8081:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    restart: always
+    networks:
+      - proyectos-app
+
+networks:
+  proyectos-app:
+
+volumes:
+  jenkins_home:
