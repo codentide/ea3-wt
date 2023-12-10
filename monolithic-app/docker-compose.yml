@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  monolithic-app:
+    container_name: monolithic-app
+    image: monolithic-app:v1
+    build:
+      context: .
+    ports:
+      - "4001:4001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    networks:
+      - proyectos-app
+
+networks:
+  proyectos-app:
+

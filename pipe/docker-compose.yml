@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  jenkins:
+    container_name: pipe-jenkins
+    image: pipe-jenkins:v1  
+    build:
+      context: .
+    ports:
+      - "8081:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    restart: always
+    networks:
+      - proyectos-app
+
+networks:
+  proyectos-app:
+
+volumes:
+  jenkins_home:
