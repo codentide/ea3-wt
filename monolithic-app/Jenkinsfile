@@ -26,7 +26,6 @@ pipeline {
                 }
         }
 
-
         stage('Desplegar Docker'){
             steps {
                 script {
